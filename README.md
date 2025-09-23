@@ -1,1 +1,1 @@
-# boilerplate-fullstack-fastify-react
+# Boilerplate Fullstack Fastify & React

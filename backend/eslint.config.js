@@ -3,6 +3,7 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import importPlugin from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
+import globals from 'globals';
 
 export default [
   {
@@ -15,7 +16,7 @@ export default [
         project: './tsconfig.json',
       },
       globals: {
-        node: true,
+        ...globals.node,
       },
     },
     plugins: {
@@ -74,14 +75,6 @@ export default [
     },
   },
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'build/**',
-      'coverage/**',
-      '.nyc_output/**',
-      '**/*.js',
-      '**/*.d.ts',
-    ],
+    ignores: ['node_modules/**', 'dist/**', 'build/**', 'coverage/**', '.nyc_output/**', '**/*.js', '**/*.d.ts'],
   },
 ];
