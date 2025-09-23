@@ -1,0 +1,5 @@
+# Include project settings, exclude personal preferences
+.vscode/*
+!.vscode/settings.json
+
+node_modules
