@@ -38,9 +38,7 @@ export default [
       'prettier/prettier': 'error',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
-
       'no-console': 'warn',
-
       'import/order': [
         'error',
         {
@@ -56,11 +54,11 @@ export default [
         },
       ],
       'import/newline-after-import': 'error',
-
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      'prettier/prettier': ['error', { printWidth: 120 }],
     },
     settings: {
       react: {

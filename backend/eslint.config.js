@@ -47,6 +47,7 @@ export default [
         },
       ],
       'import/newline-after-import': 'error',
+      'prettier/prettier': ['error', { printWidth: 120 }],
     },
   },
   {
