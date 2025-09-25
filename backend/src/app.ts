@@ -1,6 +1,7 @@
 import Fastify, { RouteHandlerMethod, type FastifyInstance } from 'fastify';
 import fastifyHealthcheck from 'fastify-healthcheck';
 
+import { initRabbitMQ, queue } from './plugins/queue';
 import { createYogaInstance } from './plugins/yoga';
 
 const createGraphQLHandler = (fastify: FastifyInstance): { handler: RouteHandlerMethod; endpoint: string } => {
@@ -28,6 +29,7 @@ const createGraphQLHandler = (fastify: FastifyInstance): { handler: RouteHandler
 export const buildApp = async (logger = true): Promise<FastifyInstance> => {
   const app = Fastify({ logger });
   const graphQL = createGraphQLHandler(app);
+  const channel = await initRabbitMQ();
 
   app.route({
     url: graphQL.endpoint,
@@ -36,6 +38,12 @@ export const buildApp = async (logger = true): Promise<FastifyInstance> => {
   });
 
   app.register(fastifyHealthcheck);
+
+  app.get('/send', async () => {
+    const msg = 'Hello RabbitMQ!';
+    channel.sendToQueue(queue, Buffer.from(msg));
+    return { status: 'sent', message: msg };
+  });
 
   return app;
 };
