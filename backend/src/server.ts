@@ -11,7 +11,7 @@ const fastify = Fastify({
 const start = async (): Promise<void> => {
   try {
     const app = await buildApp();
-    const port = Number(process.env.PORT) || 3000;
+    const port = Number(process.env.PORT) || 4000;
 
     await app.listen({ port, host: '0.0.0.0' });
     fastify.log.info(`Server is running on http://localhost:${port}`);

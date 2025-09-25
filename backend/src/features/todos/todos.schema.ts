@@ -1,24 +1,25 @@
 import { Todo } from './todos.model';
 import { builder } from '../../plugins/builder';
 
-const todos: Todo[] = [];
+let todos: Todo[] = [];
 
 const TodoItem = builder.objectRef<Todo>('TotoItem');
 
 builder.objectType(TodoItem, {
-  description: 'An item in the system',
   fields: (t) => ({
     id: t.exposeString('id'),
     title: t.exposeString('title'),
     description: t.exposeString('description'),
+    completed: t.exposeBoolean('completed'),
+    updatedAt: t.exposeString('updatedAt'),
+    createdAt: t.exposeString('createdAt'),
   }),
 });
 
-const ItemInput = builder.inputType('TodoInput', {
+const CreateItemInput = builder.inputType('CreateTodoInput', {
   fields: (t) => ({
-    id: t.string(),
     title: t.string({ required: true }),
-    description: t.string({ required: true }),
+    description: t.string(),
   }),
 });
 
@@ -42,16 +43,19 @@ builder.mutationType({
       type: TodoItem,
       description: 'Create a new item',
       args: {
-        input: t.arg({ type: ItemInput, required: true }),
+        input: t.arg({ type: CreateItemInput, required: true }),
       },
       resolve: (_, { input }) => {
         const newItem: Todo = {
           id: `item_${Date.now()}`,
           title: input.title,
-          description: input.description,
+          description: input.description ?? undefined,
+          completed: false,
         };
 
-        todos.push(newItem);
+        // there is no need to compute a date at this stage. Db should do it automatically once is setup
+        const date = new Date().toISOString();
+        todos.push({ ...newItem, createdAt: date, updatedAt: date });
 
         return newItem;
       },
@@ -63,11 +67,9 @@ builder.mutationType({
         id: t.arg.string({ required: true }),
       },
       resolve: (_, { id }) => {
-        const index = todos.findIndex((item) => item.id === id);
-        if (index === -1) return false;
-
-        todos.splice(index, 1);
-        return true;
+        const initialLength = todos.length;
+        todos = todos.filter((item) => item.id !== id);
+        return initialLength !== todos.length;
       },
     }),
   }),

@@ -5,6 +5,7 @@ import importPlugin from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
 export default [
   {
@@ -20,9 +21,8 @@ export default [
         },
       },
       globals: {
-        browser: true,
+        ...globals.node,
         document: true,
-        window: true,
       },
     },
     plugins: {
